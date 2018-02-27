@@ -3,9 +3,22 @@ rocketmq-docker-sample for 4.0.0-incubating version
 
 + rocketmq-namesrv: RocketMQ Name Server
 + rocketmq-broker-a-m: RocketMQ Broker
-+ pub-service: Publish & Subcribe Messages
++ pub-service: Publish & Subscribe Messages
++ rocketmq-console: UI for visualization Pub & Sub
 
 ### Usage:
+
+#### Pub Service
+```
+$ cd pub-service
+$ mvn clean package
+```
+
+#### RocketMQ Console
+```
+$ cd rocketmq-console
+$ mvn clean package
+```
 
 #### docker-compose:
 ```
@@ -24,7 +37,7 @@ docker-compose up -d
 
 ### Testing Pub Sub Service
 
-#### Testing Pub&Sub Service
+#### Testing Pub & Sub Service
 http://localhost:9909/pubsub-messages
 
 #### Testing Publish Mesage
