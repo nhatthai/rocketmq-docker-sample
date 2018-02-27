@@ -1,6 +1,3 @@
-# ARG BASE_IMAGE
-# ENV BASE_IMAGE rocketmq-base-image:4.0.0-incubating
-
 # Start from a base image.
 FROM rocketmq-base-image:4.0.0-incubating
 
