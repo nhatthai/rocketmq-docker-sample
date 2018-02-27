@@ -9,8 +9,6 @@ services:
     image: rocketmq-namesrv-image:4.0.0-incubating
     build:
       context: ./namesrv
-      args:
-        BASE_IMAGE: rocketmq-base-image:4.0.0-incubating
     ports:
       - "9876:9876"
     depends_on:
@@ -20,11 +18,6 @@ services:
     image: rocketmq-broker-a-m-image:4.0.0-incubating
     build:
       context: ./broker
-      args:
-        BASE_IMAGE: rocketmq-base-image:4.0.0-incubating
-        BROKER_IP1: localhost
-        LISTEN_PORT: 10911
-        PROPERTIES_FILE: "2m-2s-async/broker-a.properties"
     environment:
       NAMESRV_ADDR: "rocketmq-namesrv:9876"
     ports:
