@@ -1,9 +1,9 @@
-# rocketmq-docker-sample
+# RocketMQ Sample
 rocketmq-docker-sample for 4.0.0-incubating version
 
 ### Usage:
 
-#### docker: 
+#### docker:
 > sh play.sh
 
 #### docker-compose:
@@ -19,3 +19,6 @@ rocketmq-docker-sample for 4.0.0-incubating version
 
 #### BrokerIp and ListenPort settings
 * [docker-compose.yml](docker-compose.yml)
+
+### Reference
+[RockerMQ Docker Sample - Github](https://github.com/jingxizheng/rocketmq-docker-sample)
