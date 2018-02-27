@@ -1,6 +1,7 @@
 package example;
 
 import java.util.List;
+import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,14 +20,18 @@ import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.remoting.exception.RemotingException;
+
 /**
  * Name service controller.
- *
+ * Nhat Thai
  */
 @RestController
 public class PubController {
     private Logger logger = LoggerFactory.getLogger(PubController.class);
     private String testTopic = "TestTopic";
+
+    @Resource
+    private RMQConfigure rMQConfigure;
 
 	@RequestMapping("/pub-message")
 	public String publishMessage() throws MQClientException, InterruptedException {
@@ -50,7 +55,7 @@ public class PubController {
     @RequestMapping(value = "/pubsub-messages")
     public Object list() throws MQClientException, RemotingException, InterruptedException {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(testTopic + "Group");
-        consumer.setNamesrvAddr("rocketmq-namesrv:9876");
+        consumer.setNamesrvAddr(rMQConfigure.getNamesrvAddr());
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
         consumer.subscribe(testTopic, "*");
         consumer.registerMessageListener(new MessageListenerConcurrently() {
@@ -65,7 +70,7 @@ public class PubController {
         consumer.start();
         final DefaultMQProducer producer = new DefaultMQProducer(testTopic + "Group");
         producer.setInstanceName(String.valueOf(System.currentTimeMillis()));
-        producer.setNamesrvAddr("rocketmq-namesrv:9876");
+        producer.setNamesrvAddr(rMQConfigure.getNamesrvAddr());
         producer.start();
 
         new Thread(new Runnable() {
