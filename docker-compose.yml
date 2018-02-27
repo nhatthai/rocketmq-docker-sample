@@ -27,8 +27,6 @@ services:
         PROPERTIES_FILE: "2m-2s-async/broker-a.properties"
     environment:
       NAMESRV_ADDR: "rocketmq-namesrv:9876"
-      BROKER_IP1: "rocketmq-broker-a-m"
-      BROKER_ADDR: "rocketmq-broker-a-m"
     ports:
       - "10911:10911"
       - "10909:10909"
@@ -44,8 +42,6 @@ services:
       context: ./pub-service
     environment:
       NAMESRV_ADDR: "rocketmq-namesrv:9876"
-      BROKER_IP1: "rocketmq-broker-a-m"
-      BROKER_ADDR: "rocketmq-broker-a-m"
     ports:
       - "9909:9909"
     depends_on:
@@ -61,7 +57,6 @@ services:
       context: ./rocketmq-console
     environment:
       NAMESRV_ADDR: rocketmq-namesrv:9876
-      BROKER_IP1: "rocketmq-broker-a-m"
     links:
       - rocketmq-namesrv
       - rocketmq-broker-a-m
