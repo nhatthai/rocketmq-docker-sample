@@ -16,11 +16,6 @@ RUN mkdir -p \
 
 RUN chmod +x bin/mqbroker
 
-# ARG BROKER_IP1
-#=192.168.220.141
-# ARG PROPERTIES_FILE
-#="2m-2s-async/broker-a.properties"
-# ENV PROPERTIES_FILE $PROPERTIES_FILE
 ENV BROKER_IP1 rocketmq-broker-a-m
 ENV LISTEN_PORT 10911
 ENV PROPERTIES_FILE "2m-2s-async/broker-a.properties"
