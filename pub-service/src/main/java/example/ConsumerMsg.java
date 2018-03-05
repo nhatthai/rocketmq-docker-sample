@@ -1,5 +1,7 @@
 package example;
 
+import javax.annotation.Resource;
+
 import java.util.List;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
@@ -14,12 +16,16 @@ import org.apache.rocketmq.common.message.MessageExt;
  */
 public class ConsumerMsg {
     private static DefaultMQPushConsumer consumer;
+    private String testTopic = "TestTopic";
+
+    @Resource
+    private RMQConfigure rMQConfigure;
 
     public ConsumerMsg() throws MQClientException, InterruptedException {
-        consumer = new DefaultMQPushConsumer("rmq-group");
-        consumer.setNamesrvAddr("rocketmq-namesrv:9876");
+        consumer = new DefaultMQPushConsumer(testTopic + "Group");
+        consumer.setNamesrvAddr(rMQConfigure.getNamesrvAddr());
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-        consumer.subscribe("TopicTest", "*");
+        consumer.subscribe(testTopic, "*");
     }
 
     public void receiveMessages() throws MQClientException {

@@ -1,5 +1,7 @@
 package example;
 
+import javax.annotation.Resource;
+
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -13,9 +15,12 @@ public class ProducerMsg {
     private DefaultMQProducer producer;
     private String testTopic = "TestTopic";
 
+    @Resource
+    private RMQConfigure rMQConfigure;
+
     public ProducerMsg() throws MQClientException, InterruptedException {
         producer = new DefaultMQProducer(testTopic + "Group");
-        producer.setNamesrvAddr("rocketmq-namesrv:9876");
+        producer.setNamesrvAddr(rMQConfigure.getNamesrvAddr());
         producer.setVipChannelEnabled(false);
         producer.start();
     }
