@@ -39,7 +39,7 @@ public class PubController {
         return "Done Publish Message";
     }
 
-    @RequestMapping(value = "/pubsub-messages")
+    @RequestMapping(value = "/pub-sub-message")
     public boolean runPubSubMessage() throws MQClientException, RemotingException, InterruptedException {
         try {
             DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(testTopic + "Group");
