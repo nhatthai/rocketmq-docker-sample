@@ -5,7 +5,6 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,34 +39,26 @@ public class PubController {
         return "Done Publish Message";
     }
 
-    @RequestMapping(value = "/hi")
-    public String greet() {
-        return "Hi there";
-    }
-
-    @RequestMapping(value = "/get-messages")
-    public String getMessages() throws MQClientException, InterruptedException {
-        ConsumerMsg consumer = new ConsumerMsg();
-        consumer.receiveMessages();
-        return "Receive Message";
-    }
-
     @RequestMapping(value = "/pubsub-messages")
-    public Object list() throws MQClientException, RemotingException, InterruptedException {
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(testTopic + "Group");
-        consumer.setNamesrvAddr(rMQConfigure.getNamesrvAddr());
-        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-        consumer.subscribe(testTopic, "*");
-        consumer.registerMessageListener(new MessageListenerConcurrently() {
+    public boolean runPubSubMessage() throws MQClientException, RemotingException, InterruptedException {
+        try {
+            DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(testTopic + "Group");
+            consumer.setNamesrvAddr(rMQConfigure.getNamesrvAddr());
+            consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
+            consumer.subscribe(testTopic, "*");
+            consumer.registerMessageListener(new MessageListenerConcurrently() {
 
-            @Override
-            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
-                ConsumeConcurrentlyContext context) {
-                logger.info("receiveMessage msgSize={}", msgs.size());
-                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
-            }
-        });
-        consumer.start();
+                @Override
+                public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
+                    ConsumeConcurrentlyContext context) {
+                    logger.info("receiveMessage msgSize={}", msgs.size());
+                    return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+                }
+            });
+            consumer.start();
+
+        } catch (Exception e) {}
+
         final DefaultMQProducer producer = new DefaultMQProducer(testTopic + "Group");
         producer.setInstanceName(String.valueOf(System.currentTimeMillis()));
         producer.setNamesrvAddr(rMQConfigure.getNamesrvAddr());
@@ -77,26 +68,21 @@ public class PubController {
 
             @Override public void run() {
 
-                int i = 0;
-                while (true) {
+                try {
+                    Message msg = new Message(testTopic,
+                        "TagA", "KEYS",
+                        ("Hello RocketMQ ").getBytes()
+                    );
+                    Thread.sleep(1000L);
+                    SendResult sendResult = producer.send(msg);
+                    System.out.printf("%s%n", sendResult);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
                     try {
-                        Message msg = new Message(testTopic,
-                            "TagA" + i,
-                            "KEYS" + i,
-                            ("Hello RocketMQ " + i).getBytes()
-                        );
-                        Thread.sleep(1000L);
-                        SendResult sendResult = producer.send(msg);
-                        System.out.printf("%s%n", sendResult);
-                        // logger.info("sendMessage={}", JsonUtil.obj2String(sendResult));
+                        Thread.sleep(1000);
                     }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                        try {
-                            Thread.sleep(1000);
-                        }
-                        catch (Exception ignore) {
-                        }
+                    catch (Exception ignore) {
                     }
                 }
             }
