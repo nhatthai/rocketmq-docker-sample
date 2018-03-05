@@ -28,10 +28,7 @@ docker-compose up -d
 ### Testing Pub Sub Service
 
 #### Testing Pub & Sub Service
-http://localhost:9909/pubsub-messages
-
-#### Testing Publish Mesage
-http://localhost:9909/pub-message
+http://localhost:9909/pub-sub-message
 
 #### RocketMQ Console
 http://localhost:8080
